@@ -1,4 +1,4 @@
-name: Build APK FIXED
+name: APK Build Stable
 
 on:
   workflow_dispatch:
@@ -10,25 +10,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install system
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk \
-          python3-pip autoconf automake libtool pkg-config \
-          zlib1g-dev libncurses5-dev libncursesw5-dev \
-          cmake libffi-dev libssl-dev
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip
 
-      - name: Upgrade pip
+      - name: Install buildozer
         run: |
-          python3 -m pip install --upgrade pip setuptools wheel
-
-      - name: Install Buildozer + Cython
-        run: |
-          pip install cython==0.29.36 buildozer
+          pip install --upgrade pip
+          pip install buildozer cython==0.29.36
 
       - name: Build APK
         run: |
-          buildozer -v android debug
+          buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
